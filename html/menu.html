@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Меню продуктов</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Админ-панель</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="btn btn-outline-light me-2" href="orders.html">Заказы</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light me-2" href="menu.html">Меню</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light me-2" href="ingredients.html">Ингредиенты</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light me-2" href="promocodes.html">Акции</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light me-2" target="_blank" href="https://batler-coffee-front.vercel.app/">Тест изменений</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light me-2" target="_blank" href="administrators.html">Администраторы</a>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-danger" id="btn-logout">Выйти</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+      
+  <div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1>Меню продуктов</h1>
+      <button id="btn-add-product" class="btn btn-primary">Добавить продукт</button>
+    </div>
+    <div id="products-row" class="row g-3"></div>
+  </div>
+
+  <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalLabel">Редактировать продукт</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="product-form">
+            <input type="hidden" name="product_id" id="product_id">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="name" class="form-label">Название</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="price" class="form-label">Цена (только число в рублях)</label>
+                <input type="number" class="form-control" id="price" name="price" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Описание</label>
+              <textarea class="form-control" id="description" name="description" rows="2" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="composition" class="form-label">Состав</label>
+              <textarea class="form-control" id="composition" name="composition" rows="2" required></textarea>
+            </div>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="protein" class="form-label">Белки (только число в граммах)</label>
+                <input type="number" class="form-control" id="protein" name="protein" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="fats" class="form-label">Жиры (только число в граммах)</label>
+                <input type="number" class="form-control" id="fats" name="fats" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="carbohydrates" class="form-label">Углеводы (только число в граммах)</label>
+                <input type="number" class="form-control" id="carbohydrates" name="carbohydrates" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="weight" class="form-label">Вес (например: 200 мл, 300 гр)</label>
+                <input type="text" class="form-control" id="weight" name="weight" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="kilocalories" class="form-label">Ккал (только число)</label>
+                <input type="number" class="form-control" id="kilocalories" name="kilocalories" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="img-file" class="form-label">Изображение</label>
+                <input type="file" class="form-control" id="img-file" accept="image/*">
+              </div>
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="is_available" name="is_available">
+              <label class="form-check-label" for="is_available">Продукт в наличии</label>
+            </div>
+            <hr>
+            <h6>Ингредиенты</h6>
+            <ul id="ingredients-list" class="list-group mb-3"></ul>
+            <button type="button" id="btn-add-ingredient" class="btn btn-secondary btn-sm">Добавить ингредиент</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <button type="button" id="btn-save-product" class="btn btn-primary">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="ingredientModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Добавить ингредиент</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <select id="ingredient-select" class="form-select mb-3"></select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <button type="button" id="btn-save-ingredient" class="btn btn-primary">Добавить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/menu.js"></script>
+</body>
+</html>
